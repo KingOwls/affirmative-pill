@@ -1,0 +1,70 @@
+# 1. Query condensada para demostrar selección de campos / no over-fetching
+query CatalogoCondensado {
+  medicines(filter: { search: "ibuprofeno" }, limit: 10) {
+    totalCount
+    nodes {
+      id
+      name
+      priceCents
+      presentation
+    }
+  }
+}
+
+# 2. Query con relaciones para observar batching de DataLoader en logs
+query CatalogoConRelaciones {
+  medicines(limit: 50) {
+    nodes {
+      id
+      name
+      category { name }
+      laboratory { name }
+    }
+  }
+}
+
+mutation CrearPedido($input: CreateOrderInput!) {
+  createOrder(input: $input) {
+    success
+    orderId
+    status
+    errors { code message field }
+  }
+}
+
+# Variables OTC:
+# {"input":{"patientName":"Paciente Demo","items":[{"medicineId":"MEDICINE_ID","quantity":1}]}}
+
+# Para medicamentos que exigen formula agregue:
+# "prescription":{"prescriptionNumber":"RX-2026-001","doctorName":"Profesional Demo","issuedAt":"2026-09-21"}
+
+query Seguimiento($id: ID!) {
+  order(id: $id) {
+    id
+    status
+    totalCents
+    prescriptionRequired
+    prescriptionValidated
+    projectedVersion
+    projectionUpdatedAt
+    items { medicineName quantity subtotalCents }
+  }
+}
+
+mutation ValidarFormula($orderId: ID!) {
+  validatePrescription(orderId: $orderId) {
+    success status errors { code message }
+  }
+}
+
+mutation Despachar($orderId: ID!) {
+  dispatchOrder(orderId: $orderId) {
+    success status errors { code message }
+  }
+}
+
+mutation Cancelar($orderId: ID!) {
+  cancelOrder(orderId: $orderId) {
+    success status errors { code message }
+  }
+}

@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: affirmative
+      POSTGRES_PASSWORD: affirmative
+      POSTGRES_DB: affirmative_pill
+    ports:
+      - "5433:5432"
+    volumes:
+      - affirmative_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U affirmative -d affirmative_pill"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      target: development
+    environment:
+      DATABASE_URL: postgresql://affirmative:affirmative@db:5432/affirmative_pill
+      PROJECTION_MODE: worker
+      PROJECTION_POLL_MS: 700
+    command: sh -c "npm run db:prepare && npm run dev"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  projector:
+    build:
+      context: .
+      target: development
+    environment:
+      DATABASE_URL: postgresql://affirmative:affirmative@db:5432/affirmative_pill
+      PROJECTION_MODE: worker
+      PROJECTION_POLL_MS: 700
+    command: sh -c "npm run db:migrate && npm run projector"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  affirmative_pg:

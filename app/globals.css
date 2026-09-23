@@ -1,0 +1,69 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f7f6;
+  --surface: #ffffff;
+  --text: #17322f;
+  --muted: #60716f;
+  --primary: #126a5c;
+  --primary-2: #0b4e45;
+  --border: #d8e4e1;
+  --danger: #a83838;
+  --warning: #8a6418;
+  --shadow: 0 14px 40px rgba(23, 50, 47, 0.08);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: Arial, Helvetica, sans-serif; }
+a { color: inherit; text-decoration: none; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+.shell { max-width: 1120px; margin: 0 auto; padding: 0 24px 56px; }
+.header { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(14px); background: rgba(244,247,246,.9); border-bottom: 1px solid var(--border); }
+.header-inner { max-width: 1120px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.brand { font-weight: 800; letter-spacing: -.02em; }
+.brand span { color: var(--primary); }
+.nav { display: flex; gap: 16px; align-items: center; }
+.nav a { color: var(--muted); font-weight: 700; }
+.cart-pill { background: var(--primary); color: white !important; padding: 9px 13px; border-radius: 999px; }
+
+.hero { padding: 72px 0 42px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 32px; align-items: center; }
+.hero h1 { font-size: clamp(42px, 7vw, 74px); line-height: .95; letter-spacing: -.055em; margin: 0 0 18px; }
+.hero p { font-size: 18px; color: var(--muted); max-width: 650px; line-height: 1.55; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); padding: 22px; }
+.metric { font-size: 34px; font-weight: 800; }
+.muted { color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+.section { padding: 28px 0; }
+.section h2 { font-size: 30px; margin: 0 0 18px; letter-spacing: -.03em; }
+.btn { display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 12px; padding: 11px 16px; background: var(--primary); color: white; font-weight: 800; }
+.btn:hover { background: var(--primary-2); }
+.btn.secondary { background: white; color: var(--primary); border: 1px solid var(--border); }
+.btn.danger { background: var(--danger); }
+.form-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.input { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; min-height: 44px; }
+.input.grow { flex: 1; min-width: 220px; }
+.badge { display: inline-flex; padding: 6px 10px; border-radius: 999px; background: #e7f4f1; color: var(--primary-2); font-size: 12px; font-weight: 800; }
+.badge.rx { background: #fff2d9; color: var(--warning); }
+.price { font-size: 24px; font-weight: 800; }
+.medicine-card { display: flex; min-height: 240px; flex-direction: column; justify-content: space-between; }
+.medicine-card h3 { font-size: 20px; margin: 14px 0 8px; }
+.stack { display: grid; gap: 14px; }
+.detail { padding: 38px 0; }
+.detail h1 { font-size: 42px; margin: 8px 0 16px; }
+.kv { display: grid; grid-template-columns: 160px 1fr; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.error { padding: 14px; border-radius: 12px; background: #fdecec; color: var(--danger); }
+.notice { padding: 14px; border-radius: 12px; background: #eef7f5; color: var(--primary-2); }
+.order-status { font-size: 30px; font-weight: 900; letter-spacing: -.03em; }
+.cart-row { display: grid; grid-template-columns: 1fr auto auto; gap: 18px; align-items: center; border-bottom: 1px solid var(--border); padding: 14px 0; }
+code { background: #e8efed; border-radius: 6px; padding: 2px 6px; }
+.footer { color: var(--muted); border-top: 1px solid var(--border); padding: 30px 0 10px; margin-top: 50px; }
+
+@media (max-width: 800px) {
+  .hero, .grid, .grid-2 { grid-template-columns: 1fr; }
+  .header-inner { align-items: flex-start; }
+  .nav { flex-wrap: wrap; justify-content: flex-end; }
+  .kv { grid-template-columns: 1fr; }
+  .cart-row { grid-template-columns: 1fr; }
+}

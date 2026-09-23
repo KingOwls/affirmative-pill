@@ -1,0 +1,42 @@
+{
+  "name": "affirmative-pill",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:prepare": "npm run db:migrate && npm run db:seed",
+    "projector": "tsx scripts/projector.ts",
+    "quality": "npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "@apollo/client": "^4.3.1",
+    "@apollo/server": "^5.5.1",
+    "@as-integrations/next": "^4.1.0",
+    "dataloader": "^2.2.3",
+    "graphql": "^16.14.2",
+    "next": "16.3.3",
+    "pg": "^8.23.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "rxjs": "^7.8.2",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.1"
+  }
+}
