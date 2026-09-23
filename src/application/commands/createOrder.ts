@@ -1,6 +1,14 @@
 import type { Pool } from "pg";
-import type { CreateOrderInput, DomainError, OrderStatus } from "@/src/domain/order";
-import { validateCreateOrderInput } from "@/src/domain/order";
+import type {
+  CreateOrderInput,
+  DomainError,
+  OrderStatus,
+} from "@/src/domain/order";
+
+import {
+  getInitialOrderStatus,
+  validateCreateOrderInput,
+} from "@/src/domain/order";
 
 type MedicineRow = {
   id: string;
@@ -45,7 +53,8 @@ export async function createOrderCommand(db: Pool, input: CreateOrderInput): Pro
       }
     }
 
-    const requiresPrescription = medicineResult.rows.some((m) => m.requires_prescription);
+    const requiresPrescription = medicineResult.rows.some( (m) => m.requires_prescription);
+    const initialStatus = getInitialOrderStatus(requiresPrescription);
     if (requiresPrescription && !input.prescription) {
       errors.push({ code: "PRESCRIPTION_REQUIRED", message: "At least one medicine requires prescription support.", field: "prescription" });
     }
@@ -56,11 +65,28 @@ export async function createOrderCommand(db: Pool, input: CreateOrderInput): Pro
     }
 
     const totalCents = input.items.reduce((total, item) => total + medicines.get(item.medicineId)!.price_cents * item.quantity, 0);
-    const orderResult = await client.query<{ id: string; status: OrderStatus; created_at: string; updated_at: string }>(
-      `INSERT INTO orders(patient_name, status, total_cents)
-       VALUES ($1, 'PENDING_APPROVAL', $2)
-       RETURNING id, status, created_at, updated_at`,
-      [input.patientName.trim(), totalCents],
+    const orderResult = await client.query<{
+      id: string;
+      status: OrderStatus;
+      created_at: string;
+      updated_at: string;
+    }>(
+      `INSERT INTO orders(
+          patient_name,
+          status,
+          total_cents
+      )
+      VALUES ($1, $2, $3)
+      RETURNING
+          id,
+          status,
+          created_at,
+          updated_at`,
+      [
+        input.patientName.trim(),
+        initialStatus,
+        totalCents,
+      ],
     );
     const order = orderResult.rows[0];
 

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { validateCreateOrderInput } from "../src/domain/order";
+import {
+  getInitialOrderStatus,
+  validateCreateOrderInput,
+} from "../src/domain/order";
+
 
 describe("order domain rules", () => {
   it("rejects an empty order", () => {
@@ -15,5 +19,17 @@ describe("order domain rules", () => {
   it("accepts a basic valid command shape", () => {
     const errors = validateCreateOrderInput({ patientName: "Paciente", items: [{ medicineId: "x", quantity: 2 }] });
     expect(errors).toEqual([]);
+  });
+
+  it("approves an OTC order immediately", () => {
+    expect(
+      getInitialOrderStatus(false)
+    ).toBe("APPROVED");
+  });
+
+  it("keeps prescription orders pending approval", () => {
+    expect(
+      getInitialOrderStatus(true)
+    ).toBe("PENDING_APPROVAL");
   });
 });

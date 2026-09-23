@@ -1,5 +1,12 @@
 export type OrderStatus = "PENDING_APPROVAL" | "APPROVED" | "DISPATCHED" | "CANCELLED";
 
+export function getInitialOrderStatus(
+  requiresPrescription: boolean,
+): OrderStatus {
+  return requiresPrescription
+    ? "PENDING_APPROVAL"
+    : "APPROVED";
+}
 export interface DomainError {
   code: string;
   message: string;
